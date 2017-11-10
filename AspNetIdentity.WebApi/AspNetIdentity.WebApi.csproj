@@ -131,10 +131,20 @@
     <Compile Include="Migrations\201711101517598_InitialCreate.Designer.cs">
       <DependentUpon>201711101517598_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711101723100_IdentityUsers.cs" />
+    <Compile Include="Migrations\201711101723100_IdentityUsers.Designer.cs">
+      <DependentUpon>201711101723100_IdentityUsers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Auth\Identity\XClaim.cs" />
+    <Compile Include="Models\Auth\Identity\XLogin.cs" />
+    <Compile Include="Models\Auth\Identity\XRole.cs" />
+    <Compile Include="Models\Auth\Identity\XRoleManager.cs" />
+    <Compile Include="Models\Auth\Identity\XUserManager.cs" />
+    <Compile Include="Models\Auth\Identity\XUserRole.cs" />
     <Compile Include="Models\XDatabaseInitializer.cs" />
     <Compile Include="Models\XAppDbContext.cs" />
-    <Compile Include="Models\XUser.cs" />
+    <Compile Include="Models\Auth\Identity\XUser.cs" />
     <Compile Include="Models\UserOrder.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="DI\ModelsModule.cs" />
@@ -160,6 +170,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201711101517598_InitialCreate.resx">
       <DependentUpon>201711101517598_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711101723100_IdentityUsers.resx">
+      <DependentUpon>201711101723100_IdentityUsers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
