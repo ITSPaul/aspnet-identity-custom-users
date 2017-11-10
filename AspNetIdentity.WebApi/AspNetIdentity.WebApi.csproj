@@ -97,6 +97,8 @@
     <Compile Include="App_Start\Bootstrapper.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Models\XUser.cs" />
+    <Compile Include="Models\UserOrder.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="DI\ModelsModule.cs" />
     <Compile Include="DI\ServicesModule.cs" />
@@ -117,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
