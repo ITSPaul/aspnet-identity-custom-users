@@ -1,8 +1,10 @@
 ﻿namespace AspNetIdentity.WebApi.Controllers
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Web.Http;
 
+    using AspNetIdentity.WebApi.Models;
     using AspNetIdentity.WebApi.Services;
 
     [RoutePrefix("api/values")]
@@ -22,11 +24,23 @@
 
         [HttpGet]
         [Route("user")]
-        public long GetUser()
+        public async Task<IHttpActionResult> GetUser()
         {
-            return this.userService.GetUserIdByName(string.Empty);
+            var user = await this.userService.GetUserAsync("krzyhook");  //this.userService.GetUserIdByName(string.Empty);
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+            var result = new
+            {
+                username = user.UserName,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                date = user.CreationDate
+            };
+            return this.Ok(result);
         }
-
+        
         // POST api/<controller>
         public void Post([FromBody]string value)
         {

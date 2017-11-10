@@ -4,6 +4,7 @@
     using System.Web.Http;
 
     using AspNetIdentity.WebApi.DI;
+    using AspNetIdentity.WebApi.Models;
 
     using Autofac;
     using Autofac.Integration.WebApi;
@@ -26,6 +27,8 @@
         {
             //Register your Web API controllers.  
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
+            builder.RegisterType<XAppDbContext>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterModule<ModelsModule>();
             builder.RegisterModule<ServicesModule>();

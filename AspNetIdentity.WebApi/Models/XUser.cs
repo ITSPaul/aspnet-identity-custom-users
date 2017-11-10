@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity.Spatial;
 
     public class XUser
     {
         public long Id { get; set; }
+
+        public string UserName { get; set; }
 
         public string FirstName { get; set; }
 
