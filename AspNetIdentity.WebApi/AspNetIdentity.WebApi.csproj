@@ -103,6 +103,11 @@
     <Compile Include="App_Start\Bootstrapper.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Migrations\201711101517598_InitialCreate.cs" />
+    <Compile Include="Migrations\201711101517598_InitialCreate.Designer.cs">
+      <DependentUpon>201711101517598_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\XDatabaseInitializer.cs" />
     <Compile Include="Models\XAppDbContext.cs" />
     <Compile Include="Models\XUser.cs" />
@@ -127,6 +132,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201711101517598_InitialCreate.resx">
+      <DependentUpon>201711101517598_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -23,10 +23,10 @@
         }
 
         [HttpGet]
-        [Route("user")]
-        public async Task<IHttpActionResult> GetUser()
+        [Route("user/{username?}")]
+        public async Task<IHttpActionResult> GetUser(string username = "krzyhook")
         {
-            var user = await this.userService.GetUserAsync("krzyhook");  //this.userService.GetUserIdByName(string.Empty);
+            var user = await this.userService.GetUserAsync(username);  //this.userService.GetUserIdByName(string.Empty);
             if (user == null)
             {
                 return this.NotFound();

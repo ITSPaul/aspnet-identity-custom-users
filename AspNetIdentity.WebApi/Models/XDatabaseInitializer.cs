@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace AspNetIdentity.WebApi.Models
 {
+    /// <summary>
+    /// It was used before migration, for first initalization. Unused now, replaced with migrations.
+    /// </summary>
     public class XDatabaseInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<XAppDbContext>
     {
         protected override void Seed(XAppDbContext context)

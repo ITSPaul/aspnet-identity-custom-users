@@ -8,8 +8,8 @@
     {
         public XAppDbContext() : base("DefaultConnection")
         {
-            Database.SetInitializer<XAppDbContext>(new XDatabaseInitializer());
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<XAppDbContext, Configuration>());
+//            Database.SetInitializer<XAppDbContext>(new XDatabaseInitializer());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<XAppDbContext, WebApi.Migrations.Configuration>());
 #if DEBUG
             //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<XAppDbContext>());
 #endif
