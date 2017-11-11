@@ -8,7 +8,7 @@
     using AspNetIdentity.WebApi.Services;
 
     [RoutePrefix("api/values")]
-    public class ValuesController : ApiController
+    public class ValuesController : BaseApiController
     {
         private readonly IUserService userService;
 
@@ -31,13 +31,19 @@
             {
                 return this.NotFound();
             }
+            var u2 = await this.AppUserManager.FindByNameAsync("SuperPowerUser");
+            var r = await this.AppRoleManager.FindByNameAsync("admin");
             var result = new
             {
                 username = user.UserName,
                 firstName = user.FirstName,
                 lastName = user.LastName,
-                date = user.CreationDate
+                date = user.CreationDate,
+                email = u2.Email,
+                role = r.Name
             };
+
+
             return this.Ok(result);
         }
         

@@ -19,6 +19,11 @@
 #endif
         }
 
+        public static XAppDbContext Create()
+        {
+            return new XAppDbContext();
+        }
+
         // from base IdentityDbContext
         //public DbSet<XUser> Users { get; set; }
         public DbSet<UserOrder> UserOrders { get; set; }
