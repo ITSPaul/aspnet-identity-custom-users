@@ -1,11 +1,10 @@
-﻿namespace Stork.Web.Providers
+﻿namespace AspNetIdentity.WebApi.Identity.Providers
 {
     using System;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
     using System.Text;
     using Microsoft.Owin.Security;
-    using WebApi.Identity.Providers;
 
     public class CustomJwtFormat : ISecureDataFormat<AuthenticationTicket>
     {
@@ -62,7 +61,7 @@
             {
                 ValidIssuer = issuer,
                 ValidateAudience = true,
-                ValidAudience = defaultAudience.ClientId,
+                ValidAudience = defaultAudience.AudienceId,
                 ValidateLifetime = true,
                 ValidateIssuer = true,
                 RequireExpirationTime = true,

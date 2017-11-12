@@ -16,7 +16,7 @@ namespace AspNetIdentity.WebApi
         {
             HttpConfiguration httpConfig = new HttpConfiguration();
 
-            this.ConfigureAuth(app);
+            this.ConfigureAuth(app, ContainerConfig.Container);
 
             //ConfigureWebApi(httpConfig);
             app.UseWebApi(httpConfig);

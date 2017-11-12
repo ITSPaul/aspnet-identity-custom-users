@@ -1,4 +1,4 @@
-﻿namespace WebApi.Identity.Providers
+﻿namespace AspNetIdentity.WebApi.Identity.Providers
 {
     using System;
     using System.Collections.Concurrent;

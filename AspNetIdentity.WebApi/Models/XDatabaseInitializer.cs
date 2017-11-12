@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AspNetIdentity.WebApi.Models
+﻿namespace AspNetIdentity.WebApi.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// It was used before migration, for first initalization. Unused now, replaced with migrations.
     /// </summary>

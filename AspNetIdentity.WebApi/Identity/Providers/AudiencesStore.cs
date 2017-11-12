@@ -1,4 +1,4 @@
-﻿namespace WebApi.Identity.Providers
+﻿namespace AspNetIdentity.WebApi.Identity.Providers
 {
     using System;
     using System.Collections.Concurrent;
@@ -17,7 +17,7 @@
                 var audience = new Audience
                 {
                     Name = ConfigurationManager.AppSettings["auth:jwt:AudienceName"],
-                    ClientId = ConfigurationManager.AppSettings["auth:jwt:AudienceId"],
+                    AudienceId = ConfigurationManager.AppSettings["auth:jwt:AudienceId"],
                     Base64Secret = ConfigurationManager.AppSettings["auth:jwt:AudienceSecret"]
                 };
 
@@ -28,7 +28,7 @@
         static AudiencesStore()
         {
             var defaultAudience = DefaultAudience;
-            AudiencesList.TryAdd(defaultAudience.ClientId, defaultAudience);
+            AudiencesList.TryAdd(defaultAudience.AudienceId, defaultAudience);
         }
 
         public static Audience AddAudience(string name)
@@ -39,7 +39,7 @@
             RNGCryptoServiceProvider.Create().GetBytes(key);
             var base64Secret = TextEncodings.Base64Url.Encode(key);
 
-            Audience newAudience = new Audience { ClientId = clientId, Base64Secret = base64Secret, Name = name };
+            Audience newAudience = new Audience { AudienceId = clientId, Base64Secret = base64Secret, Name = name };
             AudiencesList.TryAdd(clientId, newAudience);
             return newAudience;
         }
@@ -57,7 +57,7 @@
 
     public class Audience
     {
-        public string ClientId { get; set; }
+        public string AudienceId { get; set; }
         public string Base64Secret { get; set; }
         public string Name { get; set; }
     }

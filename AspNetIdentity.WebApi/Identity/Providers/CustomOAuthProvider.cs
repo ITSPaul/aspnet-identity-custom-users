@@ -1,6 +1,5 @@
-﻿namespace Stork.Web.Providers
+﻿namespace AspNetIdentity.WebApi.Identity.Providers
 {
-    using WebApi.Identity.Providers;
     using System;
     using System.Collections.Generic;
     using System.Security.Claims;
@@ -13,6 +12,7 @@
     using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.OAuth;
+
     public class CustomOAuthProvider : OAuthAuthorizationServerProvider
     {
         private IUserService userService;
@@ -24,8 +24,8 @@
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            string clientId = string.Empty;
-            string clientSecret = string.Empty;
+            var clientId = string.Empty;
+            var clientSecret = string.Empty;
 
             if (!context.TryGetBasicCredentials(out clientId, out clientSecret))
             {
@@ -42,7 +42,7 @@
 
             if (audience == null)
             {
-                context.SetError("invalid_clientId", string.Format("Invalid client_id '{0}'", context.ClientId));
+                context.SetError("invalid_clientId", $"Invalid client_id '{context.ClientId}'");
                 return Task.FromResult<object>(null);
             }
 

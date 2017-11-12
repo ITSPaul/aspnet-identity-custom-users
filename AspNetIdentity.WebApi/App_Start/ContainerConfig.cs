@@ -18,7 +18,7 @@
             Initialize(config, RegisterServices(new ContainerBuilder()));
         }
 
-        internal static void Initialize(HttpConfiguration config, IContainer container)
+        private static void Initialize(HttpConfiguration config, IContainer container)
         {
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
