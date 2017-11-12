@@ -33,7 +33,8 @@
             ConfigureOAuthTokenGeneration(app, container);
 
             //// Api controllers with an [Authorize] attribute will be validated with JWT
-            //TODO: Make it working: ConfigureOAuthTokenConsumption(app, container);
+            //TODO: Make it working: 
+            //ConfigureOAuthTokenConsumption(app, container);
 
             //// These two lines (app.UseCookieAuthentication and app.UseExternalSignInCookie) allows to use
             //// this.Request.GetOwinContext().GetUserManager<XUserManager>() inside ApiControllers
@@ -44,7 +45,7 @@
             {
                 AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
                 AuthenticationMode = AuthenticationMode.Active,
-                ExpireTimeSpan = TimeSpan.FromSeconds(20),
+                ExpireTimeSpan = TimeSpan.FromDays(20),
                 CookieSecure = CookieSecureOption.SameAsRequest,
                 CookieName = CookieAuthenticationDefaults.CookiePrefix + "XAspNetIdentity",
                 SlidingExpiration = true
