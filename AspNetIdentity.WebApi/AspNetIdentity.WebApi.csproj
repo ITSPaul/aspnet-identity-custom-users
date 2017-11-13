@@ -148,6 +148,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\IdentityController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Identity\Providers\AudiencesStore.cs" />
     <Compile Include="Identity\Providers\CustomJwtFormat.cs" />

@@ -1,7 +1,7 @@
-﻿http://localhost:50962/api/values/user/
+﻿http://localhost:50962/api/identity/userUnprotected/SuperPowerUser
 
 ###
-http://localhost:50962/api/values/user/SuperPowerUser
+http://localhost:50962/api/identity/user/krzyhook
 
 ###
 POST http://localhost:50962/auth/token HTTP/1.1
@@ -13,6 +13,22 @@ grant_type=password&username=krzyhook&password=P@ssw0rd&client_id=f079d057929d4b
 POST http://localhost:50962/auth/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic ZjA3OWQwNTc5MjlkNGIzYWI3NGVkYTI2NjgyZWJmM2M6UDkwUno4MGdHY3Z6UnJ2QVNCMVF4V1NucUY2eWY5ZGVPNW5kbVJ5N01Jcw==
+
 #Authorization: Basic Base64($CLIENT_ID:$CLIENT_SECRET) --> Base64(f079d057929d4b3ab74eda26682ebf3c:P90Rz80gGcvzRrvASB1QxWSnqF6yf9deO5ndmRy7MIs)
 
 grant_type=password&username=krzyhook&password=P@ssw0rd
+
+
+###
+@token = Bearer f079d057929d4b3ab74eda26682ebf3c
+GET http://localhost:50962/api/identity/user/krzyhook HTTP/1.1
+Authorization: {{token}}
+
+###
+http://localhost:50962/api/identity/role/1
+
+###
+http://localhost:50962/api/identity/roles
+
+###
+http://localhost:50962/api/identity/claims

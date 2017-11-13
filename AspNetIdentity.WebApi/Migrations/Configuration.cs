@@ -83,6 +83,9 @@ namespace AspNetIdentity.WebApi.Migrations
 
             var adminUser = userManager.FindByName(superPowerUser.UserName);
             userManager.AddToRoles(adminUser.Id, new string[] { "SuperAdmin", "Admin" });
+
+            var krzyhookUser = userManager.FindByName(krzyhook.UserName);
+            userManager.AddToRoles(krzyhookUser.Id, new string[] { "User" });
         }
     }
 }

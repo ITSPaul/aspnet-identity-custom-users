@@ -22,31 +22,14 @@
             return new string[] { "value1", "value2" };
         }
 
+        [Authorize(Roles = "User,Admin")]
         [HttpGet]
-        [Route("user/{username?}")]
-        public async Task<IHttpActionResult> GetUser(string username = "krzyhook")
+        [Route("Protected/{id}")]
+        public IHttpActionResult Protected([FromUri]string id)
         {
-            var user = await this.userService.GetUserAsync(username);  //this.userService.GetUserIdByName(string.Empty);
-            if (user == null)
-            {
-                return this.NotFound();
-            }
-            var u2 = await this.AppUserManager.FindByNameAsync("SuperPowerUser");
-            var r = await this.AppRoleManager.FindByNameAsync("admin");
-            var result = new
-            {
-                username = user.UserName,
-                firstName = user.FirstName,
-                lastName = user.LastName,
-                date = user.CreationDate,
-                email = u2.Email,
-                role = r.Name
-            };
-
-
-            return this.Ok(result);
+            return Ok(new { id });
         }
-        
+
         // POST api/<controller>
         public void Post([FromBody]string value)
         {
