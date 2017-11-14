@@ -34,7 +34,7 @@
 
             //// Api controllers with an [Authorize] attribute will be validated with JWT
             //TODO: Make it working: 
-            //ConfigureOAuthTokenConsumption(app, container);
+            ConfigureOAuthTokenConsumption(app, container);
 
             //// These two lines (app.UseCookieAuthentication and app.UseExternalSignInCookie) allows to use
             //// this.Request.GetOwinContext().GetUserManager<XUserManager>() inside ApiControllers
@@ -66,6 +66,8 @@
                 AuthorizationCodeExpireTimeSpan = TimeSpan.FromDays(1),
                 Provider = container.Resolve<IOAuthAuthorizationServerProvider>(),
                 AccessTokenFormat = new CustomJwtFormat(AppSettings.AuthCustomJwtFormat),
+                AuthenticationMode = AuthenticationMode.Active,
+                AuthenticationType = "Bearer",
                 RefreshTokenFormat = new TicketDataFormat(app.CreateDataProtector(typeof(OAuthAuthorizationServerMiddleware).Namespace, "Refresh_Token", "v1")),
                 RefreshTokenProvider = container.Resolve<IAuthenticationTokenProvider>()
             });
@@ -73,20 +75,19 @@
 
         private static void ConfigureOAuthTokenConsumption(IAppBuilder app, IContainer container)
         {
+            // TODO: Move it to  JwtFormatOptions
+
             var issuer = AppSettings.AuthCustomJwtFormat;
             string audienceId = AudiencesStore.DefaultAudience.AudienceId;
             byte[] audienceSecret = TextEncodings.Base64Url.Decode(AudiencesStore.DefaultAudience.Base64Secret);
 
             // Api controllers with an [Authorize] attribute will be validated with JWT
-            app.UseJwtBearerAuthentication(
-            new JwtBearerAuthenticationOptions
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions
             {
+                AccessTokenFormat = new CustomJwtFormat(AppSettings.AuthCustomJwtFormat), //TODO: pass JwtFormatOptions
                 AuthenticationMode = AuthenticationMode.Active,
-                AllowedAudiences = new[] { audienceId },
-                IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
-                {
-                    new SymmetricKeyIssuerSecurityTokenProvider(issuer, audienceSecret)
-                }
+                AuthenticationType = "Bearer",
+                Description = new AuthenticationDescription()
             });
         }
     }
