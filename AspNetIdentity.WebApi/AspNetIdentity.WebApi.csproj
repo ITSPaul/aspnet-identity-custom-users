@@ -142,7 +142,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppSettings.cs" />
     <Compile Include="App_Start\ContainerConfig.cs" />
     <Compile Include="App_Start\Bootstrapper.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -151,7 +150,8 @@
     <Compile Include="Controllers\IdentityController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Identity\Providers\AudiencesStore.cs" />
-    <Compile Include="Identity\Providers\CustomJwtFormat.cs" />
+    <Compile Include="Identity\Providers\JwtConfigurationProvider.cs" />
+    <Compile Include="Identity\Providers\JwtTokenFormat.cs" />
     <Compile Include="Identity\Providers\CustomOAuthProvider.cs" />
     <Compile Include="Identity\Providers\ExtendedClaimsProvider.cs" />
     <Compile Include="Identity\Providers\RefreshTokenProvider.cs" />

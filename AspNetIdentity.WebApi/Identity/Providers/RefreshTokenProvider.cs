@@ -8,7 +8,7 @@
 
     public class RefreshTokenProvider : IAuthenticationTokenProvider
     {
-        private static readonly ConcurrentDictionary<string, AuthenticationTicket> _refreshTokens = new ConcurrentDictionary<string, AuthenticationTicket>();
+        private static ConcurrentDictionary<string, AuthenticationTicket> _refreshTokens = new ConcurrentDictionary<string, AuthenticationTicket>();
 
         public async Task CreateAsync(AuthenticationTokenCreateContext context)
         {
@@ -22,9 +22,9 @@
 
         public void Create(AuthenticationTokenCreateContext context)
         {
-            var clientid = context.Ticket.Properties.Dictionary["audience"];
+            var audienceId = context.Ticket.Properties.Dictionary["audience"];
 
-            if (string.IsNullOrEmpty(clientid))
+            if (string.IsNullOrEmpty(audienceId) || AudiencesStore.FindAudience(audienceId) == null)
             {
                 return;
             }
@@ -34,7 +34,7 @@
             var refreshTokenProperties = new AuthenticationProperties(context.Ticket.Properties.Dictionary)
             {
                 IssuedUtc = context.Ticket.Properties.IssuedUtc,
-                ExpiresUtc = DateTime.UtcNow.AddMinutes(120) // TODO: change for production, read from web.config
+                ExpiresUtc = JwtConfigurationProvider.RefreshTokenExpiresUtc
             };
 
             context.Ticket.Properties.IssuedUtc = refreshTokenProperties.IssuedUtc;
@@ -43,7 +43,6 @@
             var refreshTokenId = Guid.NewGuid().ToString("n");
             var refreshTokenTicket = new AuthenticationTicket(context.Ticket.Identity, refreshTokenProperties);
 
-            //_refreshTokens.TryAdd(refreshTokenId, context.Ticket);
             _refreshTokens.TryAdd(refreshTokenId, refreshTokenTicket);
 
             // consider storing only the hash of the handle

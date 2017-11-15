@@ -13,10 +13,8 @@
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
     using Microsoft.Owin.Security.DataHandler;
-    using Microsoft.Owin.Security.DataHandler.Encoder;
     using Microsoft.Owin.Security.DataProtection;
     using Microsoft.Owin.Security.Infrastructure;
-    using Microsoft.Owin.Security.Jwt;
     using Microsoft.Owin.Security.OAuth;
 
     using Owin;
@@ -33,12 +31,10 @@
             ConfigureOAuthTokenGeneration(app, container);
 
             //// Api controllers with an [Authorize] attribute will be validated with JWT
-            //TODO: Make it working: 
             ConfigureOAuthTokenConsumption(app, container);
 
-            //// These two lines (app.UseCookieAuthentication and app.UseExternalSignInCookie) allows to use
-            //// this.Request.GetOwinContext().GetUserManager<XUserManager>() inside ApiControllers
-            // app.UseCookieAuthentication(new CookieAuthenticationOptions());
+            //// These following two lines (app.UseCookieAuthentication and app.UseExternalSignInCookie) allows to use
+            //// this.Request.GetOwinContext().GetUserManager<UserManager>() inside ApiControllers
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -54,18 +50,21 @@
 
         private static void ConfigureOAuthTokenGeneration(IAppBuilder app, IContainer container)
         {
+            var issuer = JwtConfigurationProvider.Issuer;
+            string audienceId = AudiencesStore.DefaultAudience.AudienceId;
+
             // OAuth 2.0 Bearer Access Token Generation
             app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
             {
-//For Dev enviroment only (on production should be AllowInsecureHttp = false)
+                //For Dev enviroment only (on production should be AllowInsecureHttp = false)
 #if DEBUG
                 AllowInsecureHttp = true,
 #endif
                 TokenEndpointPath = new PathString("/auth/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-                AuthorizationCodeExpireTimeSpan = TimeSpan.FromDays(1),
+                AccessTokenExpireTimeSpan = JwtConfigurationProvider.AccessTokenExpireTimeSpan,
+                AuthorizationCodeExpireTimeSpan = JwtConfigurationProvider.AccessTokenExpireTimeSpan,
                 Provider = container.Resolve<IOAuthAuthorizationServerProvider>(),
-                AccessTokenFormat = new CustomJwtFormat(AppSettings.AuthCustomJwtFormat),
+                AccessTokenFormat = new JwtTokenFormat(new JwtTokenOptions(audienceId, issuer)),
                 AuthenticationMode = AuthenticationMode.Active,
                 AuthenticationType = "Bearer",
                 RefreshTokenFormat = new TicketDataFormat(app.CreateDataProtector(typeof(OAuthAuthorizationServerMiddleware).Namespace, "Refresh_Token", "v1")),
@@ -75,16 +74,13 @@
 
         private static void ConfigureOAuthTokenConsumption(IAppBuilder app, IContainer container)
         {
-            // TODO: Move it to  JwtFormatOptions
-
-            var issuer = AppSettings.AuthCustomJwtFormat;
+            var issuer = JwtConfigurationProvider.Issuer;
             string audienceId = AudiencesStore.DefaultAudience.AudienceId;
-            byte[] audienceSecret = TextEncodings.Base64Url.Decode(AudiencesStore.DefaultAudience.Base64Secret);
 
             // Api controllers with an [Authorize] attribute will be validated with JWT
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions
             {
-                AccessTokenFormat = new CustomJwtFormat(AppSettings.AuthCustomJwtFormat), //TODO: pass JwtFormatOptions
+                AccessTokenFormat = new JwtTokenFormat(new JwtTokenOptions(audienceId, issuer)),
                 AuthenticationMode = AuthenticationMode.Active,
                 AuthenticationType = "Bearer",
                 Description = new AuthenticationDescription()

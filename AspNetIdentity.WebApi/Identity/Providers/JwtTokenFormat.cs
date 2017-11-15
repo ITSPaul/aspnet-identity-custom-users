@@ -11,7 +11,7 @@
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.Owin.Security;
 
-    public class CustomJwtFormat : ISecureDataFormat<AuthenticationTicket>
+    public class JwtTokenFormat : ISecureDataFormat<AuthenticationTicket>
     {
         private const string AudiencePropertyKey = "audience";
 
@@ -21,15 +21,18 @@
 
         private const string JwtIdClaimName = "jti";
 
+        private static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
         private readonly string issuer = string.Empty;
 
-        private static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private readonly string audienceId;
 
         private readonly List<string> allowedAudiences = new List<string>();
 
-        public CustomJwtFormat(string issuer)
+        public JwtTokenFormat(JwtTokenOptions jwtTokenOptions)
         {
-            this.issuer = issuer;
+            this.issuer = jwtTokenOptions.Issuer;
+            this.audienceId = jwtTokenOptions.AudienceId;
         }
 
         public string Protect(AuthenticationTicket data)
@@ -38,18 +41,12 @@
             {
                 throw new ArgumentNullException("data");
             }
-
-            string audienceId = AudiencesStore.DefaultAudience.AudienceId; //data.Properties.Dictionary.ContainsKey(AudiencePropertyKey) ? data.Properties.Dictionary[AudiencePropertyKey] : null;
-            //string audienceId = data.Properties.Dictionary.ContainsKey(AudiencePropertyKey) ? data.Properties.Dictionary[AudiencePropertyKey] : null;
-
-            //string audienceId = ConfigurationManager.AppSettings["auth:jwt:AudienceId"];
-            //string symmetricKeyAsBase64 = ConfigurationManager.AppSettings["auth:jwt:AudienceSecret"];
-
-            if (string.IsNullOrWhiteSpace(audienceId)) { 
+            if (string.IsNullOrWhiteSpace(this.audienceId))
+            {
                 throw new InvalidOperationException("AuthenticationTicket. Properties does not include audience");
             }
 
-            Audience audience = AudiencesStore.FindAudience(audienceId);
+            Audience audience = AudiencesStore.FindAudience(this.audienceId);
             var securityKey = GetSymmetricSecurityKey(audience);
             var signingCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(securityKey, Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256);
 
@@ -62,7 +59,7 @@
                 return null;
             }
 
-            var token = new JwtSecurityToken(issuer, audienceId, claims, issued.Value.UtcDateTime, expires.Value.UtcDateTime, signingCredentials);
+            var token = new JwtSecurityToken(this.issuer, this.audienceId, claims, issued.Value.UtcDateTime, expires.Value.UtcDateTime, signingCredentials);
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.WriteToken(token);
 
@@ -72,8 +69,8 @@
         public bool IsTokenValid(string protectedText)
         {
             var defaultAudience = AudiencesStore.DefaultAudience;
-//            Audience audience = AudiencesStore.FindAudience(audienceId);
-//            string symmetricKeyAsBase64 = audience.Base64Secret;
+            //            Audience audience = AudiencesStore.FindAudience(audienceId);
+            //            string symmetricKeyAsBase64 = audience.Base64Secret;
 
             var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.Default.GetBytes(defaultAudience.Base64Secret));
 
@@ -129,12 +126,11 @@
                 throw new ArgumentOutOfRangeException("protectedText", "Invalid JWT Token");
             }
 
-            Audience audience = AudiencesStore.DefaultAudience;
-            string audienceId = audience.AudienceId;
+            Audience audience = AudiencesStore.FindAudience(this.audienceId);
             var validationParameters = new TokenValidationParameters
             {
                 IssuerSigningKey = GetSymmetricSecurityKey(audience),
-                ValidAudiences = new[] { audienceId },
+                ValidAudiences = new[] { audience.AudienceId },
                 ValidateIssuer = true,
                 ValidIssuer = this.issuer,
                 ValidateLifetime = true,
@@ -166,9 +162,20 @@
             return new AuthenticationTicket(returnedIdentity, authenticationExtra);
         }
 
-        private static SymmetricSecurityKey GetSymmetricSecurityKey(Audience audience)
+        private static Microsoft.IdentityModel.Tokens.SymmetricSecurityKey GetSymmetricSecurityKey(Audience audience)
         {
             return new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.Default.GetBytes(audience.Base64Secret));
         }
+    }
+
+    public class JwtTokenOptions
+    {
+        public JwtTokenOptions(string audienceId, string issuer)
+        {
+            this.AudienceId = audienceId;
+            this.Issuer = issuer;
+        }
+        public string AudienceId { get; private set; }
+        public string Issuer { get; private set; }
     }
 }

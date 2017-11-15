@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Configuration;
     using System.Security.Cryptography;
     using Microsoft.Owin.Security.DataHandler.Encoder;
 
@@ -16,9 +15,9 @@
             {
                 var audience = new Audience
                 {
-                    Name = ConfigurationManager.AppSettings["auth:jwt:AudienceName"],
-                    AudienceId = ConfigurationManager.AppSettings["auth:jwt:AudienceId"],
-                    Base64Secret = ConfigurationManager.AppSettings["auth:jwt:AudienceSecret"]
+                    Name = JwtConfigurationProvider.AudienceName,
+                    AudienceId = JwtConfigurationProvider.AudienceId,
+                    Base64Secret = JwtConfigurationProvider.AudienceBase64Secret
                 };
 
                 return audience;

@@ -54,32 +54,30 @@
         {
             var allowedOrigin = "*";
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
-//            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Credentials", new[] { "true" });
-//            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "authorization", "content-type", "set-cookie" });
+            // context.OwinContext.Response.Headers.Add("Access-Control-Allow-Credentials", new[] { "true" });
+            // context.OwinContext.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "authorization", "content-type", "set-cookie" });
 
             var userManager = context.OwinContext.GetUserManager<XUserManager>();
-            var roleManager = context.OwinContext.Get<XRoleManager>();
 
-//            XUser user = userManager.Users.Where(x => x.Password == context.Password && x.UserName == context.UserName).FirstOrDefault();
             XUser user = await userManager.FindAsync(context.UserName, context.Password);
-            
+
             if (user == null)
             {
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
 
-//            if (!user.IsActive)
-//            {
-//                context.SetError("account_locked", "Your account has been locked");
-//                return;
-//            }
+            // TODO: Check if user is active (not locked)
+            //if (!user.IsActive)
+            //{
+            //    context.SetError("account_locked", "Your account has been locked");
+            //    return;
+            //}
 
             user.SecurityStamp = Guid.NewGuid().ToString();
 
 
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, OAuthDefaults.AuthenticationType);
-//            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
             oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
             oAuthIdentity.AddClaims(ExtendedClaimsProvider.CreateRolesBasedOnClaims(oAuthIdentity));
 
@@ -108,7 +106,6 @@
 
             // chance to change authentication ticket for refresh token requests
             var newIdentity = new ClaimsIdentity(context.Ticket.Identity);
-            // newIdentity.AddClaim(new Claim("newClaim", "newValue"));
 
             var newTicket = new AuthenticationTicket(newIdentity, context.Ticket.Properties);
             context.Validated(newTicket);
