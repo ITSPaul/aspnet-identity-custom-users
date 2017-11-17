@@ -52,11 +52,6 @@
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var allowedOrigin = "*";
-            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
-            // context.OwinContext.Response.Headers.Add("Access-Control-Allow-Credentials", new[] { "true" });
-            // context.OwinContext.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "authorization", "content-type", "set-cookie" });
-
             var userManager = context.OwinContext.GetUserManager<XUserManager>();
 
             XUser user = await userManager.FindAsync(context.UserName, context.Password);

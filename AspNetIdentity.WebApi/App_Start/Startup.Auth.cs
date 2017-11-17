@@ -10,6 +10,7 @@
 
     using Microsoft.AspNet.Identity;
     using Microsoft.Owin;
+    using Microsoft.Owin.Cors;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
     using Microsoft.Owin.Security.DataHandler;
@@ -27,6 +28,8 @@
             app.CreatePerOwinContext(XAppDbContext.Create);
             app.CreatePerOwinContext<XUserManager>(XUserManager.Create);
             app.CreatePerOwinContext<XRoleManager>(XRoleManager.Create);
+
+            app.UseCors(CorsOptions.AllowAll);
 
             ConfigureOAuthTokenGeneration(app, container);
 
