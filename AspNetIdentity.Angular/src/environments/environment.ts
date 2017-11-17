@@ -4,5 +4,9 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiHost: '//localhost:50962/',
+  jwtTokenConfig: {
+    client_id: 'f079d057929d4b3ab74eda26682ebf3c'
+  }
 };
