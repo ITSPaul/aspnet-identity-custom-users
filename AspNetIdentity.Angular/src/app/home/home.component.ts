@@ -20,4 +20,12 @@ export class HomeComponent implements OnInit {
         this.isLoggedIn = loginSuccess;
       });
     }
+
+    public logout(): void {
+      this.authService.logout();
+    }
+
+    public refreshToken(): void {
+      this.authService.refreshToken().subscribe(user => console.log('RefreshTokenUser', user));
+    }
 }

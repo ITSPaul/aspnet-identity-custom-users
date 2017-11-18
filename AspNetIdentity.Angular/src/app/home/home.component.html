@@ -3,14 +3,12 @@
         <h2>{{message}}</h2>
     </div>
 </div>
-<!-- <div class="panel panel-default">
-    <div class="panel-body">
-        <button (click)="logIn()" class="btn btn-primary">Login</button>
-        <button (click)="logOut()" class="btn btn-primary">Logout</button>
-    </div>
-</div> -->
 <div class="panel panel-default">
     <div class="panel-body">
         isLoggedIn: <strong>{{ isLoggedIn }}</strong>
+        <div *ngIf="isLoggedIn">
+            <button (click)="refreshToken()" class="btn btn-primary">Refresh Token</button>
+            <button (click)="logout()" class="btn btn-primary">Logout</button>
+        </div>
     </div>
 </div>

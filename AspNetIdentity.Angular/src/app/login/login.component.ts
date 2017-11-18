@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'khk-login',
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
     .subscribe(
         resultData => {
           this.isLogged = !!resultData;
+          console.log(resultData);
           if (this.isLogged) {
             this.router.navigate(['/']);
           }
