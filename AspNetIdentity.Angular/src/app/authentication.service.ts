@@ -25,7 +25,7 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) {
     // set token and current user if saved in local storage
-    this.currentUser = this.getStoredUser();
+    this.currentUser = this.getCachedUser();
     this.token = !!this.currentUser && this.currentUser.access_token;
   }
 
@@ -48,7 +48,7 @@ export class AuthenticationService {
   }
 
   public refreshToken(): Observable<AuthUser> {
-    const user = this.getStoredUser();
+    const user = this.getCachedUser();
     if (!user) {
         throw new Error('Token does not exist');
     }
@@ -65,8 +65,12 @@ export class AuthenticationService {
     return !!this.token && !this.jwtHelper.isTokenExpired(this.token);
   }
 
-  public getStoredUser(): AuthUser {
+  public getCachedUser(): AuthUser {
     return JSON.parse(localStorage.getItem(CurrentUserTokenKey)) as AuthUser;
+  }
+
+  public getCachedToken(): string {
+    return this.getCachedUser().access_token;
   }
 
   private sendRequest(params: HttpParams): Observable<AuthUser> {

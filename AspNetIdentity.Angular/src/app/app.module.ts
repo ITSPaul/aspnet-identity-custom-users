@@ -8,12 +8,15 @@ import { AuthenticationService } from './authentication.service';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
+import { RestrictedComponent } from './restricted/restricted.component';
+import { ValuesService } from './values.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    RestrictedComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [ AuthenticationService ],
+  providers: [ AuthenticationService, ValuesService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

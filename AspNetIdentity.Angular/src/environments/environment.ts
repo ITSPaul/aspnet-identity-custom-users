@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  apiHost: '//localhost:50962/',
+  apiHost: '//localhost:50962',
   jwtTokenConfig: {
     client_id: 'f079d057929d4b3ab74eda26682ebf3c'
   }
