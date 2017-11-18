@@ -1,10 +1,8 @@
 ﻿namespace AspNetIdentity.WebApi.Controllers
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using System.Web.Http;
 
-    using AspNetIdentity.WebApi.Models;
     using AspNetIdentity.WebApi.Services;
 
     [RoutePrefix("api/values")]
