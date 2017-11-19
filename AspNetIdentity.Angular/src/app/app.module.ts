@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RestrictedComponent } from './restricted/restricted.component';
 import { ValuesService } from './values.service';
 
+
+import { IsLoggedInGuard } from './is-logged-in.guard';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +26,11 @@ import { ValuesService } from './values.service';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [ AuthenticationService, ValuesService ],
+  providers: [
+    AuthenticationService,
+    ValuesService,
+    IsLoggedInGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

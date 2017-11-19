@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { RestrictedComponent } from './restricted/restricted.component';
+import { IsLoggedInGuard } from './is-logged-in.guard';
 
 const routes: Routes = [
     {
@@ -17,7 +18,10 @@ const routes: Routes = [
     },
     {
       path: 'restricted',
-      component: RestrictedComponent
+      component: RestrictedComponent,
+      canActivate: [
+        IsLoggedInGuard
+      ]
     }
   ];
 @NgModule({
