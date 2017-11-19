@@ -3,6 +3,8 @@ Example of custom membership system using ASP.NET Identity 2, ASP.NET Web API 2 
 
 The **AspNetIdentity.WebApi** is an HTTP ASP.NET WebApi 2 service which acts as back-end for SPA frontend  **AspNetIdentity.Angular** built using Angular 5.
 
+Default users with passwords (e.g _SuperPowerUser_) are created in `AspNetIdentity.WebApi.Migrations.Configuration.CreateUsers`
+
 # Backend
 
 ## Custom UserManager and tables
