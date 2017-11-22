@@ -10,6 +10,7 @@ namespace AspNetIdentity.WebApi.Migrations
 
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.AspNet.Identity.Owin;
 
     internal sealed class Configuration : DbMigrationsConfiguration<AspNetIdentity.WebApi.Models.XAppDbContext>
     {
@@ -55,8 +56,8 @@ namespace AspNetIdentity.WebApi.Migrations
             users.ForEach(u => context.Users.AddOrUpdate(uu => uu.UserName, u));
             context.SaveChanges();
             
-            var userManager = new XUserManager(new UserStore<XUser, XRole, long, XLogin, XUserRole, XClaim>(context));
-            var roleManager = new XRoleManager(new RoleStore<XRole, long, XUserRole>(context));
+            var userManager = new XUserManager(new UserStore<XUser, XRole, long, XLogin, XUserRole, XClaim>(context), new IdentityFactoryOptions<XUserManager>());
+            var roleManager = new XRoleManager(new RoleStore<XRole, long, XUserRole>(context), new IdentityFactoryOptions<XRoleManager>());
             
             var superPowerUser = new XUser
             {

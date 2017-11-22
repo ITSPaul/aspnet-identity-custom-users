@@ -25,9 +25,9 @@
         public void ConfigureAuth(IAppBuilder app, IContainer container)
         {
             // Configure the db context and user manager to use a single instance per request
-            app.CreatePerOwinContext(XAppDbContext.Create);
-            app.CreatePerOwinContext<XUserManager>(XUserManager.Create);
-            app.CreatePerOwinContext<XRoleManager>(XRoleManager.Create);
+            //app.CreatePerOwinContext(XAppDbContext.Create);
+            //app.CreatePerOwinContext<XUserManager>(XUserManager.Create);
+            //app.CreatePerOwinContext<XRoleManager>(XRoleManager.Create);
 
             app.UseCors(CorsOptions.AllowAll);
 

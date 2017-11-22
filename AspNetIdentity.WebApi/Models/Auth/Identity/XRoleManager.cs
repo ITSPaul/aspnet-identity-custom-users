@@ -7,13 +7,13 @@
 
     public class XRoleManager : RoleManager<XRole, long>
     {
-        public XRoleManager(IRoleStore<XRole, long> roleStore) : base(roleStore)
+        public XRoleManager(IRoleStore<XRole, long> roleStore, IdentityFactoryOptions<XRoleManager> options) : base(roleStore)
         {
         }
 
         public static XRoleManager Create(IdentityFactoryOptions<XRoleManager> options, IOwinContext context)
         {
-            return new XRoleManager(new RoleStore<XRole, long, XUserRole>(context.Get<XAppDbContext>()));
+            return new XRoleManager(new RoleStore<XRole, long, XUserRole>(context.Get<XAppDbContext>()), options);
         }
     }
 }

@@ -16,10 +16,12 @@
     public class CustomOAuthProvider : OAuthAuthorizationServerProvider
     {
         private IUserService userService;
+        private readonly XUserManager userManager;
 
-        public CustomOAuthProvider(IUserService userService)
+        public CustomOAuthProvider(IUserService userService, XUserManager userManager)
         {
             this.userService = userService;
+            this.userManager = userManager;
         }
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
@@ -52,9 +54,9 @@
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var userManager = context.OwinContext.GetUserManager<XUserManager>();
+            //var userManager = context.OwinContext.GetUserManager<XUserManager>();
 
-            XUser user = await userManager.FindAsync(context.UserName, context.Password);
+            XUser user = await this.userManager.FindAsync(context.UserName, context.Password);
 
             if (user == null)
             {

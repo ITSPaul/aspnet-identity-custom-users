@@ -6,15 +6,20 @@
     using System.Web.Http;
 
     using AspNetIdentity.WebApi.Services;
+    using Models.Auth.Identity;
 
     [RoutePrefix("api/identity")]
     public class IdentityController : BaseApiController
     {
         private readonly IUserService userService;
+        private readonly XUserManager userManager;
+        private readonly XRoleManager roleManager;
 
-        public IdentityController(IUserService userService)
+        public IdentityController(IUserService userService, XUserManager userManager, XRoleManager roleManager)
         {
             this.userService = userService;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         [Authorize]
@@ -27,7 +32,7 @@
             {
                 return this.NotFound();
             }
-            var userM = await this.AppUserManager.FindByNameAsync(username);
+            var userM = await this.userManager.FindByNameAsync(username);
             var result = new
             {
                 username = userS.UserName,
@@ -51,7 +56,7 @@
             {
                 return this.NotFound();
             }
-            var userM = await this.AppUserManager.FindByNameAsync(username);
+            var userM = await this.userManager.FindByNameAsync(username);
             var result = new
             {
                 username = userS.UserName,
@@ -69,7 +74,7 @@
         [Route("role/{id}", Name = "GetRoleById")]
         public async Task<IHttpActionResult> GetRole(long id)
         {
-            var role = await this.AppRoleManager.FindByIdAsync(id);
+            var role = await this.roleManager.FindByIdAsync(id);
 
             if (role != null)
             {
@@ -82,7 +87,7 @@
         [Route("roles", Name = "GetAllRoles")]
         public IHttpActionResult GetAllRoles()
         {
-            var roles = this.AppRoleManager.Roles;
+            var roles = this.roleManager.Roles;
 
             return Ok(roles?.Select(r => new {
                 Id = r.Id,

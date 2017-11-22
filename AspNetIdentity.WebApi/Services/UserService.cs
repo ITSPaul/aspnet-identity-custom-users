@@ -6,25 +6,29 @@
     using System.Threading.Tasks;
 
     using AspNetIdentity.WebApi.Models;
+    using Models.Auth.Identity;
 
     public class UserService : IUserService
     {
         private readonly XAppDbContext db;
+        private readonly XUserManager userManager;
 
-        public UserService(XAppDbContext dbContext)
+        public UserService(XAppDbContext dbContext, XUserManager userManager)
         {
             this.db = dbContext;
+            this.userManager = userManager;
         }
         
-        public long GetUserIdByName(string name)
+        public async Task<long> GetUserIdByNameAsync(string name)
         {
-            var user = this.GetUserAsync(name);
+            var user = await this.GetUserAsync(name);
             return user?.Id ?? Int64.MinValue;
         }
 
-        public Task<XUser> GetUserAsync(string name)
+        public async Task<XUser> GetUserAsync(string name)
         {
-            return this.db.Users.FirstOrDefaultAsync(u => u.UserName == name);
+            return await this.userManager.FindByNameAsync(name);
+//            return this.db.Users.FirstOrDefaultAsync(u => u.UserName == name);
         }
     }
 }

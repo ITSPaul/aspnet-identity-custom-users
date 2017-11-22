@@ -6,7 +6,7 @@
 
     public interface IUserService
     {
-        long GetUserIdByName(string name);
+        Task<long> GetUserIdByNameAsync(string name);
 
         Task<XUser> GetUserAsync(string name);
     }
