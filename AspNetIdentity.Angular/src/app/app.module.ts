@@ -7,12 +7,12 @@ import { AppComponent } from './app.component';
 import { AuthenticationService } from './authentication.service';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RestrictedComponent } from './restricted/restricted.component';
 import { ValuesService } from './values.service';
 
-
 import { IsLoggedInGuard } from './is-logged-in.guard';
+import { AuthInterceptor } from './auth.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +29,12 @@ import { IsLoggedInGuard } from './is-logged-in.guard';
   providers: [
     AuthenticationService,
     ValuesService,
-    IsLoggedInGuard
+    IsLoggedInGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })

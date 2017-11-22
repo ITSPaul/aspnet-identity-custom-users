@@ -16,7 +16,7 @@ const CurrentUserTokenKey = 'CURRENT_USER';
 
 @Injectable()
 export class AuthenticationService {
-  private loginUrl = environment.apiHost.replace(/\/$/, '') + '/auth/Token';
+  private loginUrl = '';
   private jwtHelper: JwtHelper = new JwtHelper();
   private loginChangedSource = new Subject<boolean>();
   public onLoginChanged: Observable<boolean> = this.loginChangedSource.asObservable();
@@ -27,6 +27,7 @@ export class AuthenticationService {
     // set token and current user if saved in local storage
     this.currentUser = this.getCachedUser();
     this.token = !!this.currentUser && this.currentUser.access_token;
+    this.loginUrl = this.getLoginUrl();
   }
 
   public login(username: string, password: string): Observable<AuthUser> {
@@ -73,6 +74,14 @@ export class AuthenticationService {
     return this.getCachedUser().access_token;
   }
 
+  public getAuthorizationHeader(): string {
+    if (this.isLoggedIn) {
+      return `Bearer ${this.token}`;
+    }
+
+    return null;
+  }
+
   private sendRequest(params: HttpParams): Observable<AuthUser> {
       const body: string = params.toString();
 
@@ -80,8 +89,8 @@ export class AuthenticationService {
         .post(this.loginUrl, body, {
             headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
          })
-         .catch(this.handleError)
          .map((response: JwtToken) => this.saveToken(response))
+         .catch((err) => this.handleError(err));
   }
 
   private saveToken(response: JwtToken): AuthUser {
@@ -102,5 +111,17 @@ export class AuthenticationService {
     }
   }
 
-  private handleError = (err: any) => Observable.throw(err.error || 'Server error');
+  private getLoginUrl(): string {
+    let loginUrl = environment.apiHost.replace(/\/$/, '') + '/auth/Token';
+    if (loginUrl.indexOf('localhost') >= 0) {
+      return loginUrl;
+    }
+    const idx = loginUrl.indexOf('//');
+    return 'https://' + loginUrl.substring(idx);
+  }
+
+  private handleError(err: any): Observable<AuthUser> {
+    this.loginChangedSource.next(false);
+    return Observable.throw(err.error || 'Server error');
+  }
 }

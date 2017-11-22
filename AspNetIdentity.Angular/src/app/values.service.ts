@@ -18,12 +18,13 @@ export class ValuesService {
 
   authGet(url: string, headers?: HttpHeaders): Observable<HttpResponse<Object>> {
 
-    if (headers) {
-      headers = this._setRequestOptions(headers);
-    } else {
-      headers = this._setRequestOptions();
-    }
-    return this.http.get<HttpResponse<Object>>(url, { headers: headers });
+    // HEADERS ARE INJECTED in auth.interceptor
+    // if (headers) {
+    //   headers = this._setRequestOptions(headers);
+    // } else {
+    //   headers = this._setRequestOptions();
+    // }
+    return this.http.get<HttpResponse<Object>>(url /*, { headers: headers }*/);
   }
 
   private _setAuthHeaders(access_token?, token_type = 'Bearer') {
