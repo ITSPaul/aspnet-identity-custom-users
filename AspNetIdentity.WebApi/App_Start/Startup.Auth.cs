@@ -22,6 +22,8 @@
 
     public partial class Startup
     {
+        internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
+
         public void ConfigureAuth(IAppBuilder app, IContainer container)
         {
             // Configure the db context and user manager to use a single instance per request
@@ -30,6 +32,8 @@
             //app.CreatePerOwinContext<XRoleManager>(XRoleManager.Create);
 
             app.UseCors(CorsOptions.AllowAll);
+
+            DataProtectionProvider = app.GetDataProtectionProvider();
 
             ConfigureOAuthTokenGeneration(app, container);
 

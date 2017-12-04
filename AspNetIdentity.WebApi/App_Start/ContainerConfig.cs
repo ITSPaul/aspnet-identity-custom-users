@@ -60,12 +60,12 @@
 
             builder.Register<IdentityFactoryOptions<XUserManager>>(c => new IdentityFactoryOptions<XUserManager>()
             {
-                DataProtectionProvider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("AspNetIdentityTest")
+                DataProtectionProvider = Startup.DataProtectionProvider //new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("AspNetIdentityTest")
             }).InstancePerLifetimeScope();
 
             builder.Register<IdentityFactoryOptions<XRoleManager>>(c => new IdentityFactoryOptions<XRoleManager>()
             {
-                DataProtectionProvider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("AspNetIdentityTest")
+                DataProtectionProvider = Startup.DataProtectionProvider //new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("AspNetIdentityTest")
             }).InstancePerLifetimeScope();
 
             builder.RegisterType<XUserManager>().AsSelf().InstancePerLifetimeScope();
