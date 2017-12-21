@@ -4,11 +4,9 @@
 
     public class WebApiApplication : System.Web.HttpApplication
     {
-        protected void Application_Start()  
+        protected void Application_Start()
         {
-            Bootstrapper.Run();
-
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+            //GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }
 }

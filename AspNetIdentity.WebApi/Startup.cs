@@ -14,12 +14,10 @@ namespace AspNetIdentity.WebApi
     {
         public void Configuration(IAppBuilder app)
         {
-            HttpConfiguration httpConfig = new HttpConfiguration();
-
-            this.ConfigureAuth(app, ContainerConfig.Container);
-
-            //ConfigureWebApi(httpConfig);
-            app.UseWebApi(httpConfig);
+            var config = Bootstrapper.Run(app);
+            WebApiConfig.Register(config);
+            app.UseAutofacWebApi(config);
+            app.UseWebApi(config);
         }
 
         private static void ConfigureWebApi(HttpConfiguration config)

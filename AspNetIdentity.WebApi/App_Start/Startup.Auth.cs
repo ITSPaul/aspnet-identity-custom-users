@@ -24,7 +24,7 @@
     {
         internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
 
-        public void ConfigureAuth(IAppBuilder app, IContainer container)
+        public static void ConfigureAuth(IAppBuilder app, IContainer container)
         {
             // Configure the db context and user manager to use a single instance per request
             //app.CreatePerOwinContext(XAppDbContext.Create);
@@ -39,20 +39,6 @@
 
             //// Api controllers with an [Authorize] attribute will be validated with JWT
             ConfigureOAuthTokenConsumption(app, container);
-
-            //// These following two lines (app.UseCookieAuthentication and app.UseExternalSignInCookie) allows to use
-            //// this.Request.GetOwinContext().GetUserManager<UserManager>() inside ApiControllers
-            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
-                AuthenticationMode = AuthenticationMode.Active,
-                ExpireTimeSpan = TimeSpan.FromDays(20),
-                CookieSecure = CookieSecureOption.SameAsRequest,
-                CookieName = CookieAuthenticationDefaults.CookiePrefix + "XAspNetIdentity",
-                SlidingExpiration = true
-            });
         }
 
         private static void ConfigureOAuthTokenGeneration(IAppBuilder app, IContainer container)

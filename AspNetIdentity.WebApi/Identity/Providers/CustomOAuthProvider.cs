@@ -8,21 +8,14 @@
     using AspNetIdentity.WebApi.Models;
     using AspNetIdentity.WebApi.Models.Auth.Identity;
     using AspNetIdentity.WebApi.Services;
-
-    using Microsoft.AspNet.Identity.Owin;
+    using Autofac;
+    using Autofac.Integration.Owin;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.OAuth;
 
     public class CustomOAuthProvider : OAuthAuthorizationServerProvider
     {
         private IUserService userService;
-        private readonly XUserManager userManager;
-
-        public CustomOAuthProvider(IUserService userService, XUserManager userManager)
-        {
-            this.userService = userService;
-            this.userManager = userManager;
-        }
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
@@ -54,9 +47,8 @@
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            //var userManager = context.OwinContext.GetUserManager<XUserManager>();
-
-            XUser user = await this.userManager.FindAsync(context.UserName, context.Password);
+            var userManager = GetUserManager(context);
+            XUser user = await userManager.FindAsync(context.UserName, context.Password);
 
             if (user == null)
             {
@@ -108,6 +100,11 @@
             context.Validated(newTicket);
 
             return Task.FromResult<object>(null);
+        }
+
+        private static XUserManager GetUserManager(OAuthGrantResourceOwnerCredentialsContext context)
+        {
+            return context.OwinContext.GetAutofacLifetimeScope().Resolve<XUserManager>();
         }
     }
 }
