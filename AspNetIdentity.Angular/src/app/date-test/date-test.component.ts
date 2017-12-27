@@ -16,6 +16,7 @@ export class DateTestComponent implements OnInit {
 
   inputDate: Date;
   inputDateText: string;
+  orderDate: Date;
 
   constructor(private http: HttpClient) { }
 
@@ -29,18 +30,20 @@ export class DateTestComponent implements OnInit {
       console.error('empty date!!!!');
       return;
     }
-console.log(this.inputDate);
 
     const body = new DateRequest();
-    const date = new Date(this.inputDate);
+    const date = this.getDate(); // new Date(this.inputDate);
     const isoDate = date.toISOString();
     const utc = date.toUTCString();
+console.log(this.inputDate, date);
 
     body.date = date;
     body.dateString = isoDate; // this.inputDateText;
     body.epoch = this.getEpoch(date);
     this.http.post<any>(this.url, body).subscribe(res => {
+console.log(res);
       this.response = res;
+      this.orderDate = this.response.order.NewDate;
     });
 
 console.log('submitted', body, utc);
@@ -48,5 +51,15 @@ console.log('submitted', body, utc);
 
   private getEpoch(date: Date): number {
     return Math.round(date.getTime() / 1000);
+  }
+
+  private getDate(): Date {
+    const d = new Date(this.inputDate); // date only
+    const result = new Date();
+
+    result.setDate(d.getDate());
+    result.setMonth(d.getMonth());
+    result.setFullYear(d.getFullYear());
+    return result;
   }
 }
