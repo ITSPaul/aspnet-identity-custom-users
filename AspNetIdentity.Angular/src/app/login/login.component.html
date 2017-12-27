@@ -5,7 +5,7 @@
     <input type="email" id="inputEmail" name="inputEmail" #userEmailInput ngModel class="form-control" placeholder="Username" required trim autofocus>
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" name="inputPassword" #userPasswordInput ngModel class="form-control" placeholder="Password" required trim>
-    
+
     <button class="btn btn-primary btn-block" type="submit" [disabled]="!loginForm.form.valid">
       Sign in
     </button>

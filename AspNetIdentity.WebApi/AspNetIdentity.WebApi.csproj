@@ -156,6 +156,7 @@
   <ItemGroup>
     <Compile Include="App_Start\ContainerConfig.cs" />
     <Compile Include="App_Start\Bootstrapper.cs" />
+    <Compile Include="Controllers\DateController.cs" />
     <Compile Include="DI\IdentityModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Controllers\SecretsController.cs" />
     <Compile Include="Controllers\ClaimsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Identity\Providers\AudiencesStore.cs" />
     <Compile Include="Identity\Providers\JwtConfigurationProvider.cs" />
     <Compile Include="Identity\Providers\JwtTokenFormat.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="Models\Auth\Identity\XUserRole.cs" />
     <Compile Include="Identity\IUserContext.cs" />
     <Compile Include="Identity\UserContext.cs" />
+    <Compile Include="Models\DateViewModel.cs" />
     <Compile Include="Models\XDatabaseInitializer.cs" />
     <Compile Include="Models\XAppDbContext.cs" />
     <Compile Include="Models\Auth\Identity\XUser.cs" />
